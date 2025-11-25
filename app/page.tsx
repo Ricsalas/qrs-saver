@@ -161,12 +161,29 @@ export default function Home() {
             <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
               QRS Saver
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 font-medium mb-2">
-              Encuentra las mejores ofertas de comida
+            <p className="text-xl md:text-2xl text-gray-700 font-semibold mb-6">
+              Encuentra las mejores ofertas cerca de ti
             </p>
-            <p className="text-lg text-gray-600">
-              Recomendaciones inteligentes con IA • Precios en pesos chilenos
-            </p>
+            <div className="flex flex-wrap justify-center gap-8 mt-6">
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
+                  <span className="text-lg">🤖</span>
+                </div>
+                <span className="text-xs text-gray-500">IA</span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
+                  <span className="text-lg">📍</span>
+                </div>
+                <span className="text-xs text-gray-500">Cerca</span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
+                  <span className="text-lg">💰</span>
+                </div>
+                <span className="text-xs text-gray-500">Descuentos</span>
+              </div>
+            </div>
           </div>
 
           {/* Chat Input */}
@@ -174,11 +191,39 @@ export default function Home() {
             <ChatInput onSend={handleSend} isLoading={isLoading} />
           </div>
 
+          {/* Cómo funciona - Versión simplificada */}
+          {!isLoading && recommendations.length === 0 && !error && (
+            <div className="max-w-3xl mx-auto mt-8 mb-6">
+              <div className="flex items-center justify-center gap-8 text-gray-600">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center text-white font-bold">
+                    1
+                  </div>
+                  <span className="text-sm font-medium">Escribe</span>
+                </div>
+                <div className="flex-1 h-0.5 bg-gradient-to-r from-orange-300 to-red-300"></div>
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center text-white font-bold">
+                    2
+                  </div>
+                  <span className="text-sm font-medium">IA recomienda</span>
+                </div>
+                <div className="flex-1 h-0.5 bg-gradient-to-r from-orange-300 to-red-300"></div>
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center text-white font-bold">
+                    3
+                  </div>
+                  <span className="text-sm font-medium">Compra</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Example Queries */}
           {!isLoading && recommendations.length === 0 && !error && (
             <div className="max-w-3xl mx-auto">
-              <p className="text-sm text-gray-600 text-center mb-4 font-medium">
-                Prueba con estos ejemplos:
+              <p className="text-xs text-gray-500 text-center mb-3">
+                Ejemplos:
               </p>
               <div className="flex flex-wrap gap-2 justify-center">
                 {exampleQueries.map((query, index) => (
@@ -455,38 +500,12 @@ export default function Home() {
             <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-orange-100 to-red-100 rounded-full mb-6">
               <span className="text-5xl">🔍</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
-              ¿Qué estás buscando?
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              ¿Qué quieres comer hoy?
             </h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Describe lo que quieres comer y te recomendaremos las mejores ofertas disponibles
+            <p className="text-gray-500 mb-6 text-sm">
+              Escribe arriba lo que buscas
             </p>
-            <div className="max-w-2xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">💡</span>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Ejemplos de búsqueda</h3>
-                      <p className="text-sm text-gray-600">
-                        &quot;algo barato con pollo&quot;, &quot;pizza económica&quot;, &quot;hamburguesa bajo 5000&quot;
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">🎯</span>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Más de 60 ofertas</h3>
-                      <p className="text-sm text-gray-600">
-                        Desde $2.500 hasta $12.990 CLP en las mejores cadenas
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>

@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRecommendations } from '@/lib/openai';
-import { offers } from '@/data/offers';
+import { getActiveOffers } from '@/lib/db/offers';
+import { offers as fallbackOffers } from '@/data/offers';
 import { Recommendation } from '@/types';
 
+/**
+ * POST /api/recommend
+ * 
+ * Gets AI-powered recommendations based on user input.
+ * Uses offers from the database (with fallback to hardcoded offers if DB is empty).
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -12,6 +19,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'userInput is required and must be a non-empty string' },
         { status: 400 }
+      );
+    }
+
+    // Get offers from database (with fallback for initial development)
+    let offers;
+    try {
+      const dbOffers = await getActiveOffers();
+      offers = dbOffers.length > 0 ? dbOffers : fallbackOffers;
+    } catch (error) {
+      console.error('Error fetching offers from database, using fallback:', error);
+      offers = fallbackOffers;
+    }
+
+    // Check if there are any offers available
+    if (!offers || offers.length === 0) {
+      return NextResponse.json(
+        { error: 'No offers available at the moment. Please try again later.' },
+        { status: 503 }
       );
     }
 

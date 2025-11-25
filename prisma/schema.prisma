@@ -1,0 +1,50 @@
+// Prisma schema for QRS Saver
+// This schema defines the Offer model for storing restaurant deals
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OfferSource {
+  uber_eats
+  rappi
+  pedidos_ya
+  direct
+}
+
+model Offer {
+  id          String      @id @default(uuid())
+  externalId  String      // ID from the aggregator/restaurant (e.g., Uber Eats product ID)
+  source      OfferSource
+  chain       String      // Restaurant chain name (e.g., "McDonald's")
+  name        String      // Offer name (e.g., "Big Mac")
+  price       Float       // Current price in the specified currency
+  currency    String      @default("CLP") // Currency code (CLP, USD, etc.)
+  originalPrice Float?    // Original price before discount (optional)
+  discountPercentage Float? // Discount percentage (optional, calculated if not provided)
+  description String?     @db.Text
+  category    String?     // Category (e.g., "Burgers", "Pizza", "Desserts")
+  tags        String[]    @default([]) // Array of tags for filtering/search
+  imageUrl    String?     @db.Text
+  url         String      @db.Text // Link to the offer on the aggregator/restaurant site
+  locationLat Float?      // Latitude
+  locationLng Float?      // Longitude
+  locationAddress String? // Human-readable address
+  city        String?     // City or region
+  validUntil  DateTime?   // When the offer expires (optional)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Unique constraint: same external ID + source shouldn't appear twice
+  @@unique([externalId, source])
+  @@index([source, isActive])
+  @@index([chain])
+  @@index([isActive, updatedAt])
+}
+
